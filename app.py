@@ -1,8 +1,8 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 from elasticsearch import Elasticsearch
 
-from .config import Config
-from .helpers import get_elastic_query
+from config import Config
+from helpers import get_elastic_query
 
 es = Elasticsearch(
         Config.ELASTICSEARCH_HOST_NAME,
@@ -21,12 +21,14 @@ def search():
 
     for hit in res['hits']['hits']:
         lis.append(hit["_source"])
-
-    return lis
+    print(request.args.get('q'))
+    a = {'data': lis, 'i': str(request.args.get('q'))}
+    print(a['i'])
+    return render_template('index.html', a=a)
 
 @app.route('/')
 def home():
-    return "Go to http://127.0.0.1:5000/search?q=saree"
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
