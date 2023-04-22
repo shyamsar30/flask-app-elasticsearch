@@ -1,8 +1,8 @@
 from flask import Flask, request
 from elasticsearch import Elasticsearch
 
-from config import Config
-from helpers import get_elastic_query
+from .config import Config
+from .helpers import get_elastic_query
 
 es = Elasticsearch(
         Config.ELASTICSEARCH_HOST_NAME,
@@ -23,6 +23,10 @@ def search():
         lis.append(hit["_source"])
 
     return lis
+
+@app.route('/')
+def home():
+    return "Go to http://127.0.0.1:5000/search?q=saree"
 
 if __name__ == '__main__':
     app.run(debug=True)
