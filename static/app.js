@@ -6,7 +6,7 @@
     // get the quotes from API
     const getQuotes = async (page, limit) => {
         console.log(window.location.href.split("q=")[1])
-        const API_URL = `http://127.0.0.1:5000/get-response?q=${window.location.href.split("q=")[1]}&from=${page}`;
+        const API_URL = `http://${window.location.host}/get-response?q=${window.location.href.split("q=")[1]}&from=${page}`;
 
         const response = await fetch(API_URL);
         // handle 404
