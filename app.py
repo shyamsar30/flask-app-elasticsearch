@@ -3,6 +3,7 @@ from elasticsearch import Elasticsearch
 
 from .config import Config
 from .helpers import get_elastic_query
+from flask_compress import Compress
 
 es = Elasticsearch(
         Config.ELASTICSEARCH_HOST_NAME,
@@ -11,6 +12,7 @@ es = Elasticsearch(
     )
 
 app = Flask(__name__)
+Compress(app)
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -28,6 +30,8 @@ def search():
 
     skip_results = skip_results * Config.DEFAULT_FETCH_SIZE
 
+    if skip_results >= 10000:
+        abort(404, "Can't query above 10000 hits.")
 
     res = es.search(
         index=Config.ELASTIC_INDEX_NAME,
@@ -67,6 +71,8 @@ def get_response():
 
     skip_results = skip_results * Config.DEFAULT_FETCH_SIZE
 
+    if skip_results >= 10000:
+        abort(404, "Can't query above 10000 hits.")
 
     res = es.search(
         index=Config.ELASTIC_INDEX_NAME,
