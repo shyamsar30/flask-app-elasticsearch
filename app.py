@@ -53,7 +53,7 @@ def search():
 
     response_to_template['time_taken'] = res['took']
     response_to_template['total_records'] = res['hits']['total']['value']
-
+    print(response_to_template)
     return render_template('index.html', a=response_to_template)
 
 @app.route('/get-response', methods=['GET'])
