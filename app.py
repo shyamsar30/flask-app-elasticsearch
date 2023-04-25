@@ -75,7 +75,7 @@ def auto_comp():
         for hit in res['hits']['hits'] :
             dic[hit["_source"][field]] = ""
     
-    return list(dic.keys())
+    return {"data": dic.keys()}
 
 
 @app.route('/get-response', methods=['GET'])
