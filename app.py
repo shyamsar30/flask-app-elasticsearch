@@ -1,8 +1,8 @@
 from flask import Flask, abort, request, render_template
 from elasticsearch import Elasticsearch
 
-from .config import Config
-from .helpers import get_elastic_query
+from config import Config
+from helpers import get_elastic_query,get_auto_search
 
 from flask_cors import CORS, cross_origin
 from flask_compress import Compress
@@ -58,6 +58,22 @@ def search():
     response_to_template['total_records'] = res['hits']['total']['value']
 
     return render_template('index.html', a=response_to_template)
+
+
+@app.route('/autocomplete') 
+def auto_comp() :
+    search_term = get_auto_search(request.args.get('s'))
+    res = es.search(
+        index=Config.ELASTIC_INDEX_NAME,
+        query=search_term,
+        size=10
+    )
+    lis = []
+    for hit in res['hits']['hits'] :
+        lis.append(hit["_source"]["title"])
+    # return render_template('index.html',title_lst=lis)
+    return lis
+
 
 @app.route('/get-response', methods=['GET'])
 def get_response():

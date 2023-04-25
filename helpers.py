@@ -1,3 +1,21 @@
+def get_auto_search(search_term) :
+    
+    return {
+      # "match_phrase": {
+      #   "title": {
+      #     "query": search_term,
+      #     "boost": 10
+      #   }
+      # }
+      "multi_match": {
+            "query": search_term,
+            "fields": [
+                "store_name^5",
+                "title"
+            ]
+        }
+    }
+
 def get_elastic_query(search_terms):
 
     return {
