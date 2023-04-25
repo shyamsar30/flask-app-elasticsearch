@@ -1,8 +1,11 @@
+import flask
 from flask import Flask, abort, request, render_template
 from elasticsearch import Elasticsearch
 
-from .config import Config
-from .helpers import get_elastic_query
+from config import Config
+from helpers import get_elastic_query
+
+from flask_cors import CORS, cross_origin
 
 es = Elasticsearch(
         Config.ELASTICSEARCH_HOST_NAME,
@@ -11,6 +14,8 @@ es = Elasticsearch(
     )
 
 app = Flask(__name__)
+
+CORS(app)
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -48,10 +53,11 @@ def search():
 
     response_to_template['time_taken'] = res['took']
     response_to_template['total_records'] = res['hits']['total']['value']
-
+    print(response_to_template)
     return render_template('index.html', a=response_to_template)
 
 @app.route('/get-response', methods=['GET'])
+@cross_origin(origins="*")
 def get_response():
     generated_query = get_elastic_query(request.args.get('q'))
     skip_results = request.args.get('from')
