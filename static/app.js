@@ -2,10 +2,9 @@
 
     const quotesEl = document.querySelector('.quotes');
     const loaderEl = document.querySelector('.loader');
-
     // get the quotes from API
     const getQuotes = async (page, limit) => {
-        console.log(window.location.href.split("q=")[1])
+        document.getElementById("main_div").classList.remove("bg_image");
         const API_URL = `http://${window.location.host}/get-response?q=${window.location.href.split("q=")[1]}&from=${page}`;
 
         const response = await fetch(API_URL);
@@ -13,6 +12,7 @@
         if (!response.ok) {
             throw new Error(`An error occurred: ${response.status}`);
         }
+        console.log(response)
         return await response.json();
     }
 
@@ -22,7 +22,6 @@
             const quoteEl = document.createElement('div');
             quoteEl.classList.add('quote');
             quoteEl.style.display = "inline-block";
-
             quoteEl.innerHTML = `
                     <style>
                         .sample{
@@ -76,7 +75,6 @@
         setTimeout(async () => {
             try {
                 // if having more quotes to fetch
-                console.log(page, limit, total)
                 if (hasMoreQuotes(page, limit, total)) {
                     // call the API to get quotes
                     const response = await getQuotes(page, limit);
