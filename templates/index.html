@@ -9,15 +9,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-    <nav class="navbar navbar-dark navbar-expand-sm" style="background-color: #0c0459;">
+    <nav class="navbar navbar-dark navbar-expand-sm" style="background-color: #530a57;">
         <a class="navbar-brand" style='margin-top:0px;' href="/">
-            <img src="https://cdn3d.iconscout.com/3d/premium/thumb/search-employee-5374228-4492206.png" width="30"
-                 height="30" alt="logo">
+            <img src="https://cdn3d.iconscout.com/3d/premium/thumb/search-employee-5374228-4492206.png" width="30px"
+                 height="30px" alt="logo">
             Search Engine
         </a>
         <form class="form-inline" style=' margin-left : 50px; margin-top: 10px;' action='/search' method="get">
             {% if a %}
-            <input class="form-control mr-" type="search" placeholder="Enter Your Query Here" aria-label="Search" name="q" value= "{{ a['i'] }}" style='width : 800px;'>
+            <input class="form-control mr-" type="search" placeholder="Enter Your Query Here" aria-label="Search" name="q" value= "{{ a['i'] }}" style='width :800px;'>
             {% else %}
             <input class="form-control mr-" type="search" placeholder="Enter Your Query Here" aria-label="Search" name="q" style='width : 800px;'>
             {% endif %}
@@ -26,23 +26,30 @@
     </nav>
 
     {% if a %}
-    <div class="row">
-        {% for i in a['data'] %}
-        <div class="col">
-            <div class="card  ml-5 mr-2 my-5" style="width:200px; height:400px">
-                <img src="{{i['image']}}"
-                     class="card-img-top" alt="..." style="width:200px; height:200px;"/>
-                <div class="card-body" style="width:200px; display: inline-block">
-                    <h6 class="card-title">{{i['title']}}</h6>
-                    <p class="card-text">
-                        {{i['description'][0:25] + "..."}}
-                    </p>
-                    <a href="{{i['page_link']}}" class="btn btn-primary">Go somewhere</a>
+    {%if a['total_records']==0%}
+        <div>
+            <img src="{{url_for('static', filename='no_result_found.jpg')}}"style="height:100%; width:100%"></img>
+        </div>
+    {%else%}
+        <div>
+            <h6 class="ml-4 mt-3">Total {{a['total_records']}} results in {{a['time_taken']/1000}} seconds</h6>
+            <div class="row">
+                <div class='col quotes'>
+
                 </div>
             </div>
+            <div class="loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
-        {% endfor %}
-    </div>
+        <script src="{{url_for('static', filename='app.js')}}"></script>
+    {% endif %}
+    {% else %}
+        <div>
+            <img src="https://www.sourcecon.com/wp-content/uploads/sites/3/2017/09/search-engines-all-category-ss-1920-700x467.jpg"style="height:100%; width:100%"></img>
+        </div>
     {% endif %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
