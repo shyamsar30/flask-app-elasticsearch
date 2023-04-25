@@ -1,8 +1,10 @@
 from flask import Flask, abort, request, render_template
 from elasticsearch import Elasticsearch
 
-from .config import Config
-from .helpers import get_elastic_query
+from config import Config
+from helpers import get_elastic_query
+
+from flask_cors import CORS, cross_origin
 from flask_compress import Compress
 
 es = Elasticsearch(
@@ -12,6 +14,8 @@ es = Elasticsearch(
     )
 
 app = Flask(__name__)
+
+CORS(app)
 Compress(app)
 
 @app.route('/search', methods=['GET'])
