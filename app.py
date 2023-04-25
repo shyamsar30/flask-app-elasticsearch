@@ -1,10 +1,10 @@
 from flask import Flask, abort, request, render_template
 from elasticsearch import Elasticsearch
 
-from config import Config
-from helpers import get_elastic_query,get_auto_search
+from .config import Config
+from .helpers import gen_query_for_auto_complete, get_elastic_query
 
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_compress import Compress
 
 es = Elasticsearch(
@@ -61,18 +61,21 @@ def search():
 
 
 @app.route('/autocomplete') 
-def auto_comp() :
-    search_term = get_auto_search(request.args.get('s'))
-    res = es.search(
-        index=Config.ELASTIC_INDEX_NAME,
-        query=search_term,
-        size=10
-    )
-    lis = []
-    for hit in res['hits']['hits'] :
-        lis.append(hit["_source"]["title"])
-    # return render_template('index.html',title_lst=lis)
-    return lis
+def auto_comp():
+    s = request.args.get('s')
+    dic = {}
+    for field in Config.AUTO_COMPLETE_FIELDS:
+        auto_complete_query = gen_query_for_auto_complete(field, request.args.get('s'))
+        res = es.search(
+            index=Config.ELASTIC_INDEX_NAME,
+            query=auto_complete_query,
+            size=10,
+            source_includes=[field]
+        )
+        for hit in res['hits']['hits'] :
+            dic[hit["_source"][field]] = ""
+    
+    return list(dic.keys())
 
 
 @app.route('/get-response', methods=['GET'])

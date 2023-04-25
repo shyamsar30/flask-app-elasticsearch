@@ -1,23 +1,26 @@
-def get_auto_search(search_term) :
-    
+def gen_query_for_auto_complete(field, query):
+
     return {
-      # "match_phrase": {
-      #   "title": {
-      #     "query": search_term,
-      #     "boost": 10
-      #   }
-      # }
-      "multi_match": {
-            "query": search_term,
+    "bool": {
+      "should": [
+        {
+          "multi_match": {
+            "query": query,
+            "type": "bool_prefix",
             "fields": [
-                "store_name^5",
-                "title"
-            ]
+              field,
+              field + "._2gram",
+              field + "._3gram"
+            ],
+            "operator": "and"
+          }
         }
+      ]
     }
+  }
 
 def get_elastic_query(search_terms):
-
+    
     return {
     "bool": {
       "should": [
@@ -78,34 +81,127 @@ def get_elastic_query(search_terms):
         {
           "match": {
             "title": {
-              "query": search_terms
+              "query": search_terms,
+              "analyzer": "my_stop_analyzer"
             }
           }
         },
         {
           "match": {
             "handle": {
-              "query": search_terms
+              "query": search_terms,
+              "analyzer": "my_stop_analyzer"
             }
           }
         },
         {
           "match": {
             "shopify_subcategory": {
-              "query": search_terms
+              "query": search_terms,
+              "analyzer": "my_stop_analyzer"
             }
           }
         },
         {
           "match": {
             "description": {
-              "query": search_terms
+              "query": search_terms,
+              "analyzer": "my_stop_analyzer"
             }
           }
         }
       ]
     }
   }
+
+  #   return {
+  #   "bool": {
+  #     "should": [
+  #       {
+  #         "match_phrase": {
+  #           "store_name": {
+  #             "query": search_terms,
+  #             "boost": 10
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match_phrase": {
+  #           "category5_name": {
+  #             "query": search_terms,
+  #             "boost": 8
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match_phrase": {
+  #           "title": {
+  #             "query": search_terms,
+  #             "boost": 6
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match_phrase": {
+  #           "handle": {
+  #             "query": search_terms,
+  #             "boost": 4
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match_phrase": {
+  #           "shopify_subcategory": {
+  #             "query": search_terms,
+  #             "boost": 2
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match_phrase": {
+  #           "description": {
+  #             "query": search_terms
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match": {
+  #           "category5_name": {
+  #             "query": search_terms
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match": {
+  #           "title": {
+  #             "query": search_terms
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match": {
+  #           "handle": {
+  #             "query": search_terms
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match": {
+  #           "shopify_subcategory": {
+  #             "query": search_terms
+  #           }
+  #         }
+  #       },
+  #       {
+  #         "match": {
+  #           "description": {
+  #             "query": search_terms
+  #           }
+  #         }
+  #       }
+  #     ]
+  #   }
+  # }
 
     ##########################################################33
     # return {
