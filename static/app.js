@@ -22,26 +22,42 @@
             const quoteEl = document.createElement('div');
             quoteEl.classList.add('quote');
             quoteEl.style.display = "inline-block";
+            let store_name=''
+            let title=''
+            if (quote.store_name.length > 35)
+            {
+            store_name = quote.store_name.slice(0,35).concat("...");
+            }
+            else{
+            store_name = quote.store_name;
+            }
+            if (quote.title.length > 35)
+            {
+            title = quote.title.slice(0,35).concat("...");
+            }
+            else{
+            title = quote.title;
+            }
             quoteEl.innerHTML = `
                     <style>
                         .sample{
                             background-image=url('https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8&w=1000&q=80')
                         }
                     </style>
-                    <div class="card ml-5 mr-4 my-5" style="width:300px; height:570px">
+                    <div class="card ml-5 mr-4 my-4" style="width:300px; height:570px">
                         <div class='sample', style="background-image:url(https://wallpapers.com/images/featured/xbsfzsltjksfompa.jpg');background-size: 200px;width:280px; height:350px;">
                       <img src=${quote.image}
                             class="card-img-top" style="width:106%; height:350px;"/>
                             </div>
-                        <div class="card-body" style="width:200px; display: inline-block">
+                        <div class="card-body" style="width:300px; display: inline-block">
                             <div style='height: 50px'>
-                            <h6 class="card-title">${quote.title.slice(0,35).concat("...")}</h6>
+                            <h6 class="card-title">${title}</h6>
                             </div>
                             <p class="card-text">
-                                ${quote.description.slice(0,35).concat("...")}
+                                ${quote.description.slice(0,50).concat("...")}
                             </p>
                             <p class="card-text" style:'margin-top:2px;'>
-                                ${quote.store_name.slice(0,15).concat("...")}
+                                ${store_name}
                             </p>
                             <a href=${quote.page_link} target='_blank' class="btn btn-primary" style:'margin-down:2px;'>Product page</a>
                         </div>

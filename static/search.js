@@ -57,8 +57,12 @@ function useSuggestion(e) {
 	document.getElementById("search_div").classList.add("d-none");
 	input.value = e.target.innerText;
 	input.focus();
+	document.getElementsByClassName('search').value=input.value
 	suggestions.innerHTML = '';
 	suggestions.classList.remove('has-suggestions');
+    setTimeout(function(){
+}, 50);
+	document.getElementById("search-btn").click();
 }
 
 input.addEventListener('keyup', searchHandler);
