@@ -124,4 +124,4 @@ def home():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='192.168.1.9', port=9876, debug=True)
